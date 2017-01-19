@@ -1,7 +1,4 @@
-# SilexProject - blog
-
- INSTALL SILEX:
-=====================
+# SilexProject - blog install
 
 ##### Go to the project folder.
 
