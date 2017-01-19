@@ -6,6 +6,10 @@ use Symfony\Component\HttpFoundation\Response;
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Silex\Application();
+$app['debug'] = true;
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/views',
+));
 $blogPosts = array(
     1 => array(
         'date'      => '2011-03-29',
@@ -27,6 +31,7 @@ $app->get('/blog', function () use ($blogPosts) {
         $output .= $post['title'];
         $output .= '<br />';
         $output .= $post['date'];
+        $output .= '<br />';
     }
 
     return $output;
@@ -39,9 +44,9 @@ $app->get('/blog/{id}', function (Silex\Application $app, $id) use ($blogPosts) 
 
     $post = $blogPosts[$id];
 
-    return  "<h1>{$post['title']}</h1>".
-        "<p>{$post['author']}</p>";
-        "<b>{$post['author']}</b>";
+    return  "<h1>Title: {$post['title']}</h1>".
+        "<b>Author: {$post['author']}</b>".
+        "<p>Text: {$post['body']}</p>";
 });
 
 $app->post('/feedback', function (Request $request) {
