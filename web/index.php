@@ -1,22 +1,27 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../app/Application.php';
 
 $app = new Silex\Application();
-
 $app['debug'] = true;
 
-$app->register(new \Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/../app/Resources/views'
-));
-
-$app->get('/hello/{name}', function($name) use($app) {
-    return $app->render('hello.html.twig', array(
-        'name' => $name
-    ));
-});
-
-$app->get('/', function() use($app){
-    return 'Hello!';
+$blogPosts = array(
+    1=>array(
+        'date' => '02.02.2017',
+        'author' => 'J.Samat',
+        'title' => 'One more time.',
+        'body' => 'Appium aims to automate any mobile app from any language and any test framework, with full access to',
+    ),
+);
+$app->get('/', function () use($blogPosts){
+   $output = '';
+   foreach ($blogPosts as $post){
+       $output .= 'Title: ' .$post['title'];
+       $output .= '<br />';
+       $output .= 'Author: ' .$post['author'];
+       $output .= '<br />';
+       $output .= 'Text: ' .$post['body'];
+       $output .= '<br />';
+   }
+   return $output;
 });
 $app->run();
