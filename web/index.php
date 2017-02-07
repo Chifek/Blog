@@ -91,4 +91,9 @@ $app->get('/', function () use ($app, $blogPosts){
    ));
 });
 
+$app->get('/login', function () use ($app){
+    return $app['twig']->render('login.twig', array(
+    ));
+});
+
 $app->run();
