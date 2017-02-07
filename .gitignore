@@ -1,3 +1,6 @@
 /vendor
 .idea/
 /logs
+/logs
+bower_components/
+node_modules/

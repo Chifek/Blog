@@ -1,0 +1,46 @@
+{% include ('header.twig') %}
+<body>
+<h1>Welcome to my blog!</h1>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/bower_components/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://use.fontawesome.com/3fcdf58d83.js"></script>
+<div>
+    <div>
+        <img src="http://www.collaborativemediacenter.org/wp-content/uploads/2016/02/logo_blogger.jpg" alt="sdfsdfsd" class="img-thumbnail">
+        <button type="button" class="btn btn-success">Add article</button>
+    </div>
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td><a href="#">{{ blog.date }}</a></td>
+                <td><a href="#">{{ blog.title }}</a></td>
+                <td><a href="#">{{ blog.author }}</a></td>
+                <td><a href="#" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{#{% for blog in blogs %}#}
+    {#<h3>{{ blog.title }}</h3>#}
+    {#<div>{{ blog.date }}</div>#}
+{#{% endfor %}#}
+</body>
+{% include ('footer.twig') %}

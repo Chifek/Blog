@@ -22,35 +22,73 @@ $blogPosts = array(
     ),
     3=>array(
         'date' => '02.03.2017',
+        'author' => 'M.Kashkaldakov',
+        'title' => 'One day Odin raz.',
+        'body' => 'Mobile app from any language and any test framework, with full access to',
+    ),
+    4=>array(
+        'date' => '02.03.2017',
         'author' => 'M.Nursultan',
+        'title' => 'One day Odin raz.',
+        'body' => 'Mobile app from any language and any test framework, with full access to',
+    ),
+    5=>array(
+        'date' => '02.03.2017',
+        'author' => 'Чынгыз Айтматов',
+        'title' => 'One day Odin raz.',
+        'body' => 'Mobile app from any language and any test framework, with full access to',
+    ),
+    6=>array(
+        'date' => '02.03.2017',
+        'author' => 'Сунь Лин Жунь',
+        'title' => 'One day Odin raz.',
+        'body' => 'Mobile app from any language and any test framework, with full access to',
+    ),
+    7=>array(
+        'date' => '02.03.2017',
+        'author' => 'Базарбаева А.',
         'title' => 'One day Odin raz.',
         'body' => 'Mobile app from any language and any test framework, with full access to',
     ),
 );
 
-//show all articles
-$app->get('/', function () use($blogPosts){
-   $output = '';
-   foreach ($blogPosts as $post){
-       $output .= '<br />';
-       $output .= '<a href="#">' .$post['title'] .'</a>';
-       $output .= '<br />';
-   }
-   return $output;
-});
+////show all articles
+//$app->get('/', function () use($blogPosts){
+//   $output = '';
+//   foreach ($blogPosts as $post){
+//       $output .= '<br />';
+//       $output .= '<a href="#">' .$post['title'] .'</a>';
+//       $output .= '<br />';
+//   }
+//   return $output;
+//});
 
-// show one article
-$app->get('/{id}', function (Silex\Application $app, $id) use ($blogPosts){
-    if(!isset($blogPosts[$id])){
-        $app->abort(404, "Post does not exist");
-    }
-    $post = $blogPosts[$id];
-    return "<h1>{$post['title']}</h1>" . "<p>{$post['body']}</p>";
-});
+//// show one article
+//$app->get('/{id}', function (Silex\Application $app, $id) use ($blogPosts){
+//    if(!isset($blogPosts[$id])){
+//        $app->abort(404, "Post does not exist");
+//    }
+//    $post = $blogPosts[$id];
+//    return "<h1>{$post['title']}</h1>" . "<p>{$post['body']}</p>";
+//});
 
 //$app->get('/hello/{name}', function ($name) use($app){
-//   return $app['twig']->render('hello.twig', array(
+//   return $app['twig']->render('main.twig', array(
 //       'name' => $name
 //   ));
 //});
+
+//$app->get('/', function () use ($app, $blogPosts) {
+//    return $app['twig']->render('main.twig', array(
+//       'name' => 'Ruslan',
+//        'blogs' => $blogPosts
+//   ));
+//});
+
+$app->get('/', function () use ($app, $blogPosts){
+   return $app['twig']->render('main.twig', array(
+      'blogs' => $blogPosts
+   ));
+});
+
 $app->run();
