@@ -38,6 +38,13 @@ $blogPosts = array(
     ),
 );
 
+$blogProvider = function ($id) use ($app, $blogPosts) {
+    if(!isset($blogPosts[$id])){
+        $app->abort(404, "Нет такого ID - вращайте барабан!");
+    }
+    return $blogPosts[$id];
+};
+
 ////show all articles
 //$app->get('/', function () use($blogPosts){
 //   $output = '';
@@ -79,15 +86,15 @@ $app->get('/', function () use ($app, $blogPosts){
 });
 
 //Show one blog
-$app->get('/{id}', function($id) use($app, $blogPosts){
-    if(!isset($blogPosts[$id])){
-        $app->abort(404, "Нет такого ID - вращайте барабан!");
-    }
-    $post = $blogPosts[$id];
+$app->get('/post/{post}', function ($post) use($app){
     return $app['twig']->render('oneblog.twig', array(
         'blogs' => $post
     ));
-});
+})
+    ->bind('blog_post')
+    ->convert('post', $blogProvider)
+;
+
 $app->get('/login', function () use ($app){
     return $app['twig']->render('login.twig', array(
     ));
