@@ -19,8 +19,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Date</th>
                 <th>Title</th>
+                <th>Date</th>
                 <th>Author</th>
                 <th>Action</th>
             </tr>
@@ -29,10 +29,10 @@
         <tbody>
         {% for blog in blogs %}
             <tr>
-                <td><a href="#">{{ blog.date }}</a></td>
-                <td><a href="#">{{ blog.title }}</a></td>
-                <td><a href="#">{{ blog.author }}</a></td>
-                <td><a href="#" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                <td><a href="/{{ blog.id }}">{{ blog.title }}</a></td>
+                <td><a href="/{{ blog.id }}">{{ blog.date }}</a></td>
+                <td><a href="/{{ blog.id }}">{{ blog.author }}</a></td>
+                <td><a href="/{{ blog.id }}" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>

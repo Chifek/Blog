@@ -9,44 +9,30 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 $blogPosts = array(
     1=>array(
+        'id' => '1',
         'date' => '02.02.2017',
         'author' => 'J.Samat',
         'title' => 'One more time.',
         'body' => 'Appium aims to automate any mobile app from any language and any test framework, with full access to',
     ),
     2=>array(
+        'id' => '2',
         'date' => '02.02.2016',
         'author' => 'I.Ruslan',
         'title' => 'Хоп хей нананей!',
         'body' => 'Appwdeghfekjhgkjfedhgfkjdhgkjfheg, with full access to',
     ),
     3=>array(
+        'id' => '3',
         'date' => '02.03.2017',
         'author' => 'M.Kashkaldakov',
         'title' => 'One day Odin raz.',
         'body' => 'Mobile app from any language and any test framework, with full access to',
     ),
     4=>array(
+        'id' => '4',
         'date' => '02.03.2017',
         'author' => 'M.Nursultan',
-        'title' => 'One day Odin raz.',
-        'body' => 'Mobile app from any language and any test framework, with full access to',
-    ),
-    5=>array(
-        'date' => '02.03.2017',
-        'author' => 'Чынгыз Айтматов',
-        'title' => 'One day Odin raz.',
-        'body' => 'Mobile app from any language and any test framework, with full access to',
-    ),
-    6=>array(
-        'date' => '02.03.2017',
-        'author' => 'Сунь Лин Жунь',
-        'title' => 'One day Odin raz.',
-        'body' => 'Mobile app from any language and any test framework, with full access to',
-    ),
-    7=>array(
-        'date' => '02.03.2017',
-        'author' => 'Базарбаева А.',
         'title' => 'One day Odin raz.',
         'body' => 'Mobile app from any language and any test framework, with full access to',
     ),
@@ -94,6 +80,9 @@ $app->get('/', function () use ($app, $blogPosts){
 
 //Show one blog
 $app->get('/{id}', function($id) use($app, $blogPosts){
+    if(!isset($blogPosts[$id])){
+        $app->abort(404, "Нет такого ID - вращайте барабан!");
+    }
     $post = $blogPosts[$id];
     return $app['twig']->render('oneblog.twig', array(
         'blogs' => $post
