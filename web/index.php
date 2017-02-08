@@ -85,12 +85,20 @@ $blogPosts = array(
 //   ));
 //});
 
+//Show all blogs
 $app->get('/', function () use ($app, $blogPosts){
    return $app['twig']->render('main.twig', array(
       'blogs' => $blogPosts
    ));
 });
 
+//Show one blog
+$app->get('/{id}', function($id) use($app, $blogPosts){
+    $post = $blogPosts[$id];
+    return $app['twig']->render('oneblog.twig', array(
+        'blogs' => $post
+    ));
+});
 $app->get('/login', function () use ($app){
     return $app['twig']->render('login.twig', array(
     ));
