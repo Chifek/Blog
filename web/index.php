@@ -6,6 +6,17 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver'    => 'pdo_pgsql',
+        'host'      => 'localhost',
+        'dbname'    => 'silex_db',
+        'user'      => 'postgres',
+        'password'  => 'postgres',
+        'charset'   => 'utf8',
+    ),
+));
+
 
 $blogPosts = array(
     1=>array(
@@ -98,6 +109,15 @@ $app->get('/post/{post}', function ($post) use($app){
 $app->get('/login', function () use ($app){
     return $app['twig']->render('login.twig', array(
     ));
+});
+
+//Usage DB
+$app->get('/blog/{id}', function ($id) use ($app) {
+    $sql = "SELECT * FROM posts WHERE id = ?";
+    $post = $app['db']->fetchAssoc($sql, array((int) $id));
+
+    return  "<h1>{$post['title']}</h1>".
+        "<p>{$post['text']}</p>";
 });
 
 $app->run();
