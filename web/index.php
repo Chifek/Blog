@@ -22,32 +22,6 @@ $app->get('/login', function () use ($app){
     ));
 });
 
-//Show one blog from $blogPosts
-//$app->get('/post/{post}', function ($post) use($app){
-//    return $app['twig']->render('oneblog.twig', array(
-//        'blogs' => $post
-//    ));
-//})
-//    ->bind('blog_post')
-//    ->convert('post', $blogProvider)
-//;
-
-//Show all blogs from $blogPosts
-//$app->get('/', function () use ($app, $blogPosts){
-//    return $app['twig']->render('main.twig', array(
-//        'blogs' => $blogPosts
-//    ));
-//});
-
-//Usage DB
-//$app->get('/blog/{id}', function ($id) use ($app) {
-//    $sql = "SELECT * FROM posts WHERE id = ?";
-//    $post = $app['db']->fetchAssoc($sql, array((int) $id));
-//
-//    return  "<h1>{$post['title']}</h1>".
-//        "<p>{$post['text']}</p>";
-//});
-
 //Show all posts from DB
 $app->get('/', function () use ($app) {
     $sql = "SELECT * FROM posts";
@@ -55,14 +29,14 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('main.twig', array(
         'blogs' => $posts
     ));
-});
+})
+    ->bind('blog_posts')
+;
 
 //Show one blog from  DB
 $app->get('/{post}', function () use ($app) {
     $sql = "SELECT * FROM posts";
     $post = $app['db']->fetchAssoc($sql);
-//    var_dump($post);
-//    die();
     return $app['twig']->render('oneblog.twig', array(
         'blogs' => $post
     ));
