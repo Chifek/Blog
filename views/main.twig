@@ -29,8 +29,7 @@
         <tbody>
         {% for blog in blogs %}
             <tr>
-                {#<td><a href="{{ path('blog_post', {'post': blog.id}) }}">{{ blog.title }}</a></td>#}
-                <td><a href="">{{ blog.title }}</a></td>
+                <td><a href="{{ path('blog_post', {'post': blog.id}) }}">{{ blog.title }}</a></td>
                 <td>{{ blog.date }}</td>
                 <td>{{ blog.author }}</td>
                 <td><a href="#" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="#" data-toggle="tooltip" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
@@ -40,9 +39,5 @@
 
     </table>
 </div>
-{#{% for blog in blogs %}#}
-    {#<h3>{{ blog.title }}</h3>#}
-    {#<div>{{ blog.date }}</div>#}
-{#{% endfor %}#}
 </body>
 {% include ('footer.twig') %}
