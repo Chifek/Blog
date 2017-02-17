@@ -22,6 +22,13 @@ $app->get('/login', function () use ($app){
     ));
 });
 
+//Add new post
+$app->get('/add-new', function () use($app){
+    return $app['twig']->render('add_new_post.twig', array(
+    ));
+})
+    ->bind('new_post');
+
 //Show all posts from DB
 $app->get('/', function () use ($app) {
     $sql = "SELECT * FROM posts";
@@ -43,5 +50,4 @@ $app->get('/{post}', function () use ($app) {
 })
     ->bind('blog_post')
 ;
-
 $app->run();
