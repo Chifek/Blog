@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -7,40 +7,45 @@ use Symfony\Component\HttpFoundation\Response;
 $app = new Silex\Application();
 $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/../views',
+    'twig.path' => __DIR__ . '/../views',
 ));
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
-        'driver'    => 'pdo_pgsql',
-        'host'      => 'localhost',
-        'dbname'    => 'silex_db',
-        'user'      => 'postgres',
-        'password'  => 'postgres',
-        'charset'   => 'utf8',
+        'driver' => 'pdo_pgsql',
+        'host' => 'localhost',
+        'dbname' => 'silex_db',
+        'user' => 'postgres',
+        'password' => 'postgres',
+        'charset' => 'utf8',
     ),
 ));
 
-$app->get('/login', function () use ($app){
-    return $app['twig']->render('login.twig', array(
-    ));
+$app->get('/login', function () use ($app) {
+    return $app['twig']->render('login.twig', array());
 });
 
-//Add new post
-$app->post('/add_new_post', function (){
+//ADD NEW POST
+$app->post('/post', function (Request $request) use ($app) {
 
-    $sql = "INSERT INTO posts (text, date, title, author) VALUES ('Text', '2017-02-24', 'Title', 'Author')";
-    return new Response();
+    $post = $request->request->get('post');
+    $post['date'] = date('Y-m-d');
+
+    $app['db']->insert('posts', $post);
+    $postId = $app['db']->lastInsertId();
+
+    return $app->redirect('/post/'.$postId);
 })
     ->bind('add_new_post');
 
-//Go to 'Add new post'
-$app->get('/add-new', function () use($app){
-    return $app['twig']->render('add_new_post.twig', array(
-    ));
+
+// ROUTE - 'ADD NEW POST'
+$app->get('/add-new', function () use ($app) {
+    return $app['twig']->render('add_new_post.twig', array());
 })
     ->bind('new_post');
 
-//Show all posts from DB
+//SHOW ALL POST FROM DB
 $app->get('/', function () use ($app) {
     $sql = "SELECT * FROM posts";
     $posts = $app['db']->fetchAll($sql);
@@ -48,17 +53,15 @@ $app->get('/', function () use ($app) {
         'blogs' => $posts
     ));
 })
-    ->bind('blog_posts')
-;
+    ->bind('blog_posts');
 
-//Show one blog from  DB
+//SHOW ONE POST FROM DB
 $app->get('/post/{post}', function ($post) use ($app) {
     $sql = "SELECT * FROM posts WHERE id = ?";
-    $post = $app['db']->fetchAssoc($sql, array((int) $post));
+    $post = $app['db']->fetchAssoc($sql, array((int)$post));
     return $app['twig']->render('oneblog.twig', array(
         'blogs' => $post
     ));
 })
-    ->bind('blog_post')
-;
+    ->bind('blog_post');
 $app->run();
