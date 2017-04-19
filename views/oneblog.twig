@@ -18,7 +18,13 @@
     <div>
         <p>{{ blogs['text'] }}</p>
     </div>
+    <div style="color: gray">
+        Author: {{ blogs['author'] }}
+        Date: {{ blogs['date'] }}
+    </div>
+    <form class="form-group" action="#" method="get">
+        <button type="submit" class="btn btn-default">Delete post</button>
+    </form>
 </div>
-
 </body>
 {% include ('footer.twig') %}
