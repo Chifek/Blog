@@ -13,16 +13,17 @@
 <div>
     <a href="{{ path('blog_posts') }}" class="btn btn-success">Back to the posts list</a>
     <div>
-        <h1>{{ blogs['title']}}</h1>
+        <h1>{{ blog.title}}</h1>
     </div>
     <div>
-        <p>{{ blogs['text'] }}</p>
+        <p>{{ blog.text }}</p>
     </div>
     <div style="color: gray">
-        Author: {{ blogs['author'] }}
-        Date: {{ blogs['date'] }}
+        Author: {{ blog.author }}
+        Date: {{ blog.date }}
     </div>
-    <form class="form-group" action="#" method="get">
+    <form class="form-group" action="{{ path('delete_post', {'post': blog.id}) }}" method="post">
+        <input type="hidden" name="_method" value="delete">
         <button type="submit" class="btn btn-default">Delete post</button>
     </form>
 </div>
