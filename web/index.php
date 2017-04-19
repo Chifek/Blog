@@ -3,7 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+Request::enableHttpMethodParameterOverride();
 $app = new Silex\Application();
 $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -34,12 +34,19 @@ $app->post('/post', function (Request $request) use ($app) {
     $app['db']->insert('posts', $post);
     $postId = $app['db']->lastInsertId();
 
-    return $app->redirect('/post/'.$postId);
+    return $app->redirect('/post/' . $postId);
 })
     ->bind('add_new_post');
 
+//DELETE POST
+$app->delete('/post/{post}', function ($post) use ($app) {
+    $app['db']->delete('posts', ['id' => $post]);
 
-// ROUTE - 'ADD NEW POST'
+    return $app->redirect('/');
+})
+    ->bind('delete_post');
+
+// ROUTE - 'ADD NEW POST'delete
 $app->get('/add-new', function () use ($app) {
     return $app['twig']->render('add_new_post.twig', array());
 })
@@ -60,7 +67,7 @@ $app->get('/post/{post}', function ($post) use ($app) {
     $sql = "SELECT * FROM posts WHERE id = ?";
     $post = $app['db']->fetchAssoc($sql, array((int)$post));
     return $app['twig']->render('oneblog.twig', array(
-        'blogs' => $post
+        'blog' => $post
     ));
 })
     ->bind('blog_post');
