@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 Request::enableHttpMethodParameterOverride();
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 $app = new Silex\Application();
 $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -18,6 +19,26 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'user' => 'postgres',
         'password' => 'postgres',
         'charset' => 'utf8',
+    ),
+));
+
+///-----> NEED TO END
+$app->register(new DoctrineOrmServiceProvider, array(
+    'orm.proxies_dir' => '/path/to/proxies',
+    'orm.em.options' => array(
+        'mappings' => array(
+            // Using actual filesystem paths
+            array(
+                'type' => 'annotation',
+                'namespace' => 'Foo\Entities',
+                'path' => __DIR__.'/src/Foo/Entities',
+            ),
+            array(
+                'type' => 'xml',
+                'namespace' => 'Bat\Entities',
+                'path' => __DIR__.'/src/Bat/Resources/mappings',
+            ),
+        ),
     ),
 ));
 
