@@ -1,33 +1,25 @@
-{% include ('header.twig') %}
-<body>
-<br>
-<br>
-<br>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-{#<script src="/bower_components/bootstrap/js/bootstrap.min.js"></script>#}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script src="https://use.fontawesome.com/3fcdf58d83.js"></script>
-<div>
-    <form class="form-group" action="{{ path('add_new_post') }}" method="post">
-        <div class="form-group">
-            <label for="exampleInputAuthor2">Author</label>
-            <input type="text" class="form-control" id="exampleInputAuthor2"
-                   placeholder="Enter author" name="post[author]" required>
-        </div>
-        <div class="form-group">
-            <label for="exampleInputTitle2">Title</label>
-            <input type="text" class="form-control" id="exampleInputTitle2"
-                   placeholder="Title here" name="post[title]" required>
-        </div>
-        <div>
-            <label for="exampleInputText2">Text</label>
-            <textarea class="form-control" rows="3"
-                      placeholder="Enter text here" name="post[text]" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-default">Create new post</button>
-    </form>
-</div>
-</body>
-{% include ('footer.twig') %}
+{% extends 'base.twig' %}
+{% block content %}
+    <div>
+        <form class="form-group" action="{{ path('add_new_post') }}" method="post">
+            <div class="form-group">
+                <label for="exampleInputAuthor2">Author</label>
+                <input type="text" class="form-control" id="exampleInputAuthor2"
+                       placeholder="Enter author" name="post[author]" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputTitle2">Title</label>
+                <input type="text" class="form-control" id="exampleInputTitle2"
+                       placeholder="Title here" name="post[title]" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputText2">Text</label>
+                <textarea class="form-control" rows="3"
+                          placeholder="Enter text here" name="post[text]" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Create new post
+            </button>
+        </form>
+    </div>
+{% endblock %}

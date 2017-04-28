@@ -1,34 +1,29 @@
-{% include ('header.twig') %}
-<body>
-<br>
-<br>
-<br>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-{#<script src="/bower_components/bootstrap/js/bootstrap.min.js"></script>#}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script src="https://use.fontawesome.com/3fcdf58d83.js"></script>
-
-<div>
-    <a href="{{ path('blog_posts') }}" class="btn btn-success">Back to the posts list</a>
+{% extends 'base.twig' %}
+{% block content %}
     <div>
-        <h1>{{ blog.title}}</h1>
+        <a href="{{ path('blog_posts') }}" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back to the posts list
+        </a>
+        <div>
+            <h1>{{ blog.title }}</h1>
+        </div>
+        <div>
+            <p>{{ blog.text }}</p>
+        </div>
+        <div style="color: gray">
+            Author: {{ blog.author }}
+            Date: {{ blog.date }}
+        </div>
+        <form class="form-group" action="{{ path('delete_post', {'post': blog.id}) }}" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="btn btn-danger">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete post
+            </button>
+        </form>
+        <div>
+            <a href="{{ path('new_post') }}" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add article
+            </a>
+        </div>
     </div>
-    <div>
-        <p>{{ blog.text }}</p>
-    </div>
-    <div style="color: gray">
-        Author: {{ blog.author }}
-        Date: {{ blog.date }}
-    </div>
-    <form class="form-group" action="{{ path('delete_post', {'post': blog.id}) }}" method="post">
-        <input type="hidden" name="_method" value="delete">
-        <button type="submit" class="btn btn-default">Delete post</button>
-    </form>
-    <div>
-        <a href="{{ path('new_post') }}" class="btn btn-default">Add article</a>
-    </div>
-</div>
-</body>
-{% include ('footer.twig') %}
+{% endblock %}
