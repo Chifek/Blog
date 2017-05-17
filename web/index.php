@@ -52,6 +52,7 @@ $app->post('/post', function (Request $request) use ($app) {
         return $app->redirect('/login');
     }
     $post = $request->request->get('post');
+
     $post['date'] = date('Y-m-d');
     $post['author'] = $user['username'];
     $app['db']->insert('posts', $post);
@@ -106,15 +107,18 @@ $app->get('/post/{post}', function ($post) use ($app) {
     $post = $app['db']->fetchAssoc($sql, array((int)$post));
 
     return $app['twig']->render('oneblog.twig', array(
-        'blog' => $post
+        'blog' => $post,
+        'users' => $user
     ));
 })
     ->bind('blog_post');
 
 //AUTHENTICATION
-$app->get('/login', function (Request $request) use ($app) {
-    $username = $request->server->get('PHP_AUTH_USER', false);
-    $password = $request->server->get('PHP_AUTH_PW');
+$app->post('/auth', function (Request $request) use ($app) {
+    $dataRequest = $request->request->get('user');
+
+    $username = $dataRequest['username'];
+    $password = $dataRequest['password'];
 
     $sql = "SELECT * FROM users WHERE username = '$username'";
     $user = $app['db']->fetchAssoc($sql);
@@ -125,10 +129,10 @@ $app->get('/login', function (Request $request) use ($app) {
     }
 
     $response = new Response();
-    $response->headers->set('WWW-Authenticate', sprintf('Basic realm="%s"', 'site_login'));
     $response->setStatusCode(401, 'Please sign in.');
-    return $response;
-});
+    return $app->redirect('/');
+})
+    ->bind('auth');
 
 //LOGOUT
 //NEED TO END
@@ -139,5 +143,11 @@ $app->get('/logout', function () use ($app) {
     return $app->redirect('/');
 })
     ->bind('session_end');
+
+//LOGIN FORM
+$app->get('/login', function () use ($app) {
+
+    return $app['twig']->render('login.twig', array());
+});
 
 $app->run();
