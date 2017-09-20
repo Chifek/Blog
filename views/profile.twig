@@ -1,0 +1,25 @@
+{% extends 'base.twig' %}
+{% block content %}
+    <div>
+        <a href="{{ path('blog_posts') }}" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Go to main menu
+        </a>
+        <div>
+            <p>Username: {{ user.username }}</p>
+            <p>Id: {{ user.id }}</p>
+            <p>Password: {{ user.password }}</p>
+        </div>
+        <form class="form-group" action="{{ path('change_password') }}" method="post">
+            <div class="form-group">
+                <label for="exampleInputTitle2">Change password: </label>
+                <input type="password" class="form-control" id="exampleInputTitle2"
+                       placeholder="Enter old password" name="change[oldPass]" required>
+                <input type="password" class="form-control" id="exampleInputTitle2"
+                       placeholder="Enter new password" name="change[newPass]" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+            </button>
+        </form>
+    </div>
+{% endblock %}

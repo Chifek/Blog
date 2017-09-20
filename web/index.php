@@ -165,4 +165,47 @@ $app->get('/login', function () use ($app) {
     return $app['twig']->render('login.twig', array());
 });
 
+//USER PROFILE PAGE
+$app->get('/profile', function (Request $request) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
+    }
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $user = $app['db']->fetchAssoc($sql, array($userName));
+
+    return $app['twig']->render('profile.twig', array(
+        'user' => $user,
+        'users' => $userName
+    ));
+})
+    ->bind('user_profile');
+
+//CHANGE PASSWORD
+$app->post('/change', function (Request $request) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
+    }
+    $changePassword = $request->request->get('change');
+
+    $newPass = $changePassword['newPass'];
+    $oldPass = $changePassword['oldPass'];
+
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $user = $app['db']->fetchAssoc($sql, array($userName));
+    $oldPassFromDB = $user['password'];
+    $t['password'] = $newPass;
+    $r['username'] = $userName;
+    if ($oldPass === $oldPassFromDB) {
+        $app['db']->update('users', $t, $r);
+    }
+    return $app->redirect('/profile');
+})
+    ->bind('change_password');
+
 $app->run();
