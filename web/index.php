@@ -3,6 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 Request::enableHttpMethodParameterOverride();
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
@@ -48,13 +49,16 @@ $app->register(new DoctrineOrmServiceProvider, array(
 
 //ADD NEW POST
 $app->post('/post', function (Request $request) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
     }
     $post = $request->request->get('post');
 
     $post['date'] = date('Y-m-d');
-    $post['author'] = $user['username'];
+    $post['author'] = $userName;
     $app['db']->insert('posts', $post);
     $postId = $app['db']->lastInsertId();
 
@@ -63,9 +67,12 @@ $app->post('/post', function (Request $request) use ($app) {
     ->bind('add_new_post');
 
 //DELETE POST
-$app->delete('/post/{post}', function ($post) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
+$app->delete('/post/{post}', function (Request $request, $post) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
     }
     $app['db']->delete('posts', ['id' => $post]);
 
@@ -74,20 +81,25 @@ $app->delete('/post/{post}', function ($post) use ($app) {
     ->bind('delete_post');
 
 // ROUTE - 'ADD NEW POST'delete
-$app->get('/add-new', function () use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
+$app->get('/add-new', function (Request $request) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
     }
     return $app['twig']->render('add_new_post.twig', array());
 })
     ->bind('new_post');
 
 //SHOW ALL POST FROM DB
-$app->get('/', function () use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
-    }
+$app->get('/', function (Request $request) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
 
+    if ($userName === null) {
+        return new RedirectResponse('/login');
+    }
     $sql = "SELECT * FROM posts";
     $posts = $app['db']->fetchAll($sql);
 
@@ -99,22 +111,27 @@ $app->get('/', function () use ($app) {
     ->bind('blog_posts');
 
 //SHOW ONE POST FROM DB
-$app->get('/post/{post}', function ($post) use ($app) {
-    if (null === $user = $app['session']->get('user')) {
-        return $app->redirect('/login');
+$app->get('/post/{post}', function (Request $request, $post) use ($app) {
+    $session = $request->getSession();
+    $userName = $session->get('user'){'username'};
+
+    if ($userName === null) {
+        return new RedirectResponse('/login');
     }
     $sql = "SELECT * FROM posts WHERE id = ?";
     $post = $app['db']->fetchAssoc($sql, array((int)$post));
 
     return $app['twig']->render('oneblog.twig', array(
         'blog' => $post,
-        'users' => $user
+        'users' => $userName
     ));
 })
     ->bind('blog_post');
 
 //AUTHENTICATION
 $app->post('/auth', function (Request $request) use ($app) {
+    $session = $request->getSession();
+
     $dataRequest = $request->request->get('user');
 
     $username = $dataRequest['username'];
@@ -124,29 +141,26 @@ $app->post('/auth', function (Request $request) use ($app) {
     $user = $app['db']->fetchAssoc($sql);
 
     if ($user['username'] === $username && $user['password'] === $password) {
-        $app['session']->set('user', array('username' => $username));
-        return $app->redirect('/');
+        $session->set('user', array('username' => $username));
+        return new RedirectResponse('/');
     }
 
     $response = new Response();
     $response->setStatusCode(401, 'Please sign in.');
-    return $app->redirect('/');
+
+    return $app->redirect('/login');
 })
     ->bind('auth');
 
 //LOGOUT
-//NEED TO END
 $app->get('/logout', function () use ($app) {
     $app['session']->set('user', array('' => $username = null));
-//    var_dump($app['session']->get('user'));
-//    die();
-    return $app->redirect('/');
+    return $app->redirect('/login');
 })
     ->bind('session_end');
 
 //LOGIN FORM
 $app->get('/login', function () use ($app) {
-
     return $app['twig']->render('login.twig', array());
 });
 
