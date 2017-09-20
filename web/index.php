@@ -102,10 +102,11 @@ $app->get('/', function (Request $request) use ($app) {
     }
     $sql = "SELECT * FROM posts";
     $posts = $app['db']->fetchAll($sql);
-
+    $countArticle = count($posts);
     return $app['twig']->render('main.twig', array(
         'blogs' => $posts,
-        'users' => $userName
+        'users' => $userName,
+        'count' => $countArticle
     ));
 })
     ->bind('blog_posts');
