@@ -105,7 +105,7 @@ $app->get('/', function (Request $request) use ($app) {
 
     return $app['twig']->render('main.twig', array(
         'blogs' => $posts,
-        'users' => $user
+        'users' => $userName
     ));
 })
     ->bind('blog_posts');
