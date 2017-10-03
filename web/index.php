@@ -100,7 +100,7 @@ $app->get('/', function (Request $request) use ($app) {
     if ($userName === null) {
         return new RedirectResponse('/login');
     }
-    $sql = "SELECT * FROM posts";
+    $sql = "SELECT * FROM posts ORDER BY id DESC";
     $posts = $app['db']->fetchAll($sql);
     $countArticle = count($posts);
     return $app['twig']->render('main.twig', array(
